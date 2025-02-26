@@ -9,31 +9,31 @@ Entity::Entity(){
     this->isEntity_Static = false;
     this->entity_exists = true;
 };
-Entity::Entity(duo _pos, duo _obj, bool _isStatic){
-    this->entity_position = _pos;
-    this->entity_objective = _obj;
-    this->isEntity_Static = _isStatic;
+Entity::Entity(duo entity_position , duo entity_objective , bool isEntity_Static){
+    this->entity_position = entity_position;
+    this->entity_objective = entity_objective;
+    this->isEntity_Static = isEntity_Static;
 };
 Entity::~Entity(){
     kill();
 };
 
 
-void Entity::name(string _name){
-    this->entity_name = _name;
+void Entity::name(string entity_name ){
+    this->entity_name = entity_name;
 };
-void Entity::body(char _body){
-    this->entity_body = _body;
+void Entity::body(char entity_body){
+    this->entity_body = entity_body;
 };
-void Entity::position(duo _pos){
-    this->entity_position = _pos;
+void Entity::position(duo entity_position){
+    this->entity_position = entity_position;
 };
-void Entity::objective(duo _obj){
-    if ((_obj.x == entity_objective.x) && (_obj.y == entity_objective.y)){return;}
-    this->entity_objective = _obj;
+void Entity::objective(duo entity_objective){
+    if ((entity_objective.x == entity_objective.x) && (entity_objective.y == entity_objective.y)){return;}
+    this->entity_objective = entity_objective;
 };
-void Entity::isStatic(bool _isStatic){
-    this->isEntity_Static = _isStatic;
+void Entity::isStatic(bool isEntity_Static){
+    this->isEntity_Static = isEntity_Static;
 };
 
 string Entity::name(){
@@ -106,7 +106,7 @@ void Entity::move(duo _objective){
         int rise = find_ratio(x_distance, y_distance).y;
         int y_direction = (rise > 0) ? UP : DOWN;
         this->move(y_direction);
-    }
+    } 
 }
 void Entity::kill(){
     this->entity_exists = false;

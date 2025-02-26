@@ -10,6 +10,9 @@
 #include <random>
 #include <algorithm>
 #include <unistd.h>
+#include <cstdlib>
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -18,7 +21,6 @@ using namespace std;
 // Struct to pair two values
 struct duo{ 
     int x, y; 
-
     void flip();
     void setZero(int op);
     void neg(int Z);
@@ -29,6 +31,7 @@ struct duo{
         const vector<int>& exclude = {}
     );
 }; 
+
 
 
 
