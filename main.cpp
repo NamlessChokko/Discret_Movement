@@ -1,59 +1,47 @@
-#include "include.hpp"
+#include "Dismov/Dismov.hpp" 
+#include "Dismov/entities/Chaser.hpp"
+#include "Dismov/entities/Dummy.hpp"
+
+
+using namespace std;
 
 int main (){
-    Entity herbivorous;
-    herbivorous.name("sheep");
-    herbivorous.body('#');
-    herbivorous.position({randNum(19), randNum(19)});
-    herbivorous.objective({randNum(19), randNum(19)});
 
-    Entity carnivorous;
-    carnivorous.name("wolf");
-    carnivorous.body('@');
-    carnivorous.position({randNum(19), randNum(19)});
-    carnivorous.objective(herbivorous.position());
+    Map map(
+        10, 
+        20, 
+        10
+    );
 
-    long car_points = 0;
-    long herb_points = 0;
+    Chaser wolf(map);
+    wolf.set_name("Wolf");
+    wolf.set_body('W');
+    wolf.set_position({5, 5});
+    wolf.set_isStatic(false);
+    wolf.born();
 
-    while(herbivorous.doesExist()){
-        system("clear");
-        cout << "\033[31mCarnivorous points: \033[37m" << car_points << endl;
-        cout << "\033[33mHerbivorous points: \033[37m" << herb_points << endl;
+    Chaser sheep(map);
+    sheep.set_name("Sheep");
+    sheep.set_body('S');
+    sheep.set_position({1, 1});
+    sheep.set_isStatic(false);
+    sheep.born();
 
-        for(int y = 0; y < 20; y++){
-            for(int x = 0; x < 20; x++){
-                duo pos = {x,y};
-                
+    Dummy fruit(map);
+    fruit.set_name("Fruit");
+    fruit.set_body('F');
+    fruit.set_position({3, 3});
+    fruit.set_isStatic(false);
+    fruit.born();
 
 
-                if ((pos.x == carnivorous.position().x) && pos.y == carnivorous.position().y){
-                    cout << "\033[31m" << carnivorous.body() << "\033[37m_";
-                }else if ((pos.x == herbivorous.position().x) && pos.y == herbivorous.position().y){
-                    cout << "\033[33m" << herbivorous.body() << "\033[37m_";
-                }else if ((pos.x == herbivorous.objective().x) && (pos.y == herbivorous.objective().y)) {
-                    cout << "\033[32m0\033[37m_";
-                }else {
-                    cout << "\033[37m" << "__" ;
-                }
-            }
-            cout << endl;
-        }
-        if ((herbivorous.position().x == herbivorous.objective().x) && (herbivorous.position().y == herbivorous.objective().y)){
-            herb_points++;
-            usleep(100000); 
-            herbivorous.objective({randNum(19), randNum(19)});
-        }
+    wolf.set_objective(&sheep);
+    sheep.set_objective(&fruit);
 
-        if ((carnivorous.position().x == herbivorous.position().x) && (carnivorous.position().y == herbivorous.position().y)){
-            car_points++;
-            usleep(100000);
-            herbivorous.position({randNum(19), randNum(19)});
-        }
-        herbivorous.move(herbivorous.objective());
-        carnivorous.move(herbivorous.position());
-        usleep(100000);
-    }
+    
+
 
     return 0;
 }
+
+

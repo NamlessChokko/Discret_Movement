@@ -1,37 +1,57 @@
-# Compilador y flags
-CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17
+CYAN  = \033[1;36m
+PURPLE = \033[1;35m
+RESET = \033[0m
+
+# Nombre del ejecutable
+TARGET = bin/program.out
 
 # Directorios
-SRC_DIR = src
+SRC_DIR = Dismov/src
+ENTITIES_DIR = Dismov/entities
+BASIC_DIR = Dismov/Basic
+INC_DIR = Dismov/inc
 OBJ_DIR = obj
-BIN_DIR = bin
 
-# Archivos fuente y objetos
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp) main.cpp
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+# Buscar archivos fuente en subdirectorios
+SRC_FILES := $(shell find $(SRC_DIR) -type f -name '*.cpp')
+ENTITY_FILES := $(wildcard $(ENTITIES_DIR)/*.cpp)
+BASIC_FILES := $(wildcard $(BASIC_DIR)/*.cpp)
+SRCS := $(SRC_FILES) $(ENTITY_FILES) $(BASIC_FILES)
 
-# Ejecutable final
-TARGET = $(BIN_DIR)/program
+# Generar la lista de archivos objeto (reemplazando rutas correctamente)
+OBJS := $(patsubst Dismov/%.cpp, $(OBJ_DIR)/Dismov/%.o, $(SRCS))
+MAIN_OBJ := $(OBJ_DIR)/main.o
 
-# Regla principal
-all: $(TARGET)
+# Compilador y flags
+CXX = g++
+CXXFLAGS = -Wall -std=c++17 -I$(INC_DIR)
 
-# Compilar el ejecutable
-$(TARGET): $(OBJECTS) | $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-
-# Compilar archivos .cpp a .o
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+# Regla para compilar cada archivo fuente en obj/
+$(OBJ_DIR)/Dismov/%.o: Dismov/%.cpp | obj_dirs
+	@echo "\n$(CYAN)Compilando $(PURPLE)$<$(CYAN) -> $(PURPLE)$@$(RESET)"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Crear directorios si no existen
-$(BIN_DIR) $(OBJ_DIR):
-	mkdir -p $@
+# Regla para compilar todas las dependencias (entities y src)
+src: $(OBJS)
 
-# Limpiar archivos generados
+# Regla para compilar y linkear main.cpp después de src
+main: src | bin
+	@echo "\n$(CYAN)Compilando Main...$(RESET)"
+	$(CXX) $(CXXFLAGS) -c main.cpp -o $(MAIN_OBJ)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(MAIN_OBJ) $(OBJS)
+	@echo "\n\033[1;32mMain compilado correctamente. $(RESET)"
+
+# Crear carpetas necesarias para obj/ (recursivamente)
+obj_dirs:
+	mkdir -p $(OBJ_DIR)/Dismov/src $(OBJ_DIR)/Dismov/entities $(OBJ_DIR)/Dismov/Basic
+	mkdir -p $(patsubst Dismov/%, $(OBJ_DIR)/Dismov/%, $(shell find $(SRC_DIR) -type d)) 
+
+# Crear carpeta para bin/
+bin:
+	mkdir -p bin
+
+# Limpiar archivos compilados
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -rf $(OBJ_DIR) $(TARGET)
 
-# Forzar recompilación
-re: clean all
+.PHONY: src main clean obj_dirs

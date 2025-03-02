@@ -57,9 +57,26 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "chrono": "cpp",
+        "strstream": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "stdfloat": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp",
+        "fstream": "cpp"
     },
     "cSpell.words": [
+        "BRCKT",
+        "DISMOV",
         "geeksforgeeks"
     ]
 }

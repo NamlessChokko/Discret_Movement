@@ -1,4 +1,10 @@
-#include "../include.hpp"
+#include "../../inc/math.hpp"
+#include "../../inc/structs.hpp"
+#include <cmath>
+#include <random>
+#include <algorithm>
+
+using namespace std;
 
 int mcd (int a, int b) {
     a = abs(a); b = abs(b);
@@ -46,4 +52,8 @@ int randNum(
     }
     uniform_real_distribution<float> dist(static_cast<float>(min), static_cast<float>(max));
     return dist(gen);
+}
+
+bool even (int input){
+    return abs((input % 2) - 1);
 }
