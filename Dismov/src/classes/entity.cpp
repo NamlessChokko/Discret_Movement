@@ -7,7 +7,6 @@ using namespace std;
 
 
 Entity::Entity(Map &map) : map(map){
-    map.add_entity(this);
     this->name = "Null";
     this->body = '0';
     this->position = {0,0};
@@ -84,14 +83,27 @@ void Entity::move(int dir){
 
 
 void Entity::born(){
+    if(exists){
+        return;
+    }
+
     this->exists = true;
+    map.add_entity(this);
 }
+
 void Entity::kill(){
+    if(!exists){
+        return;
+    }
+
     this->exists = false;
     this->body = '\0';
     this->position = {0,0};
     this->isStatic = true;
     this->name = "";
+
+    map.delete_entity(this->id); 
+    this->exists = false;
 }
 
 void Entity::turn(){

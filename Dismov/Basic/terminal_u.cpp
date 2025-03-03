@@ -11,7 +11,7 @@
     #include <unistd.h>
 #endif
 
-char getch() {
+char basic::getch() {
 #ifdef _WIN32
     return _getch();
 #else
@@ -27,7 +27,7 @@ char getch() {
 #endif
 }
 
-int getTerminalWidth() {
+int basic::getTerminalWidth() {
     int width = 80; 
 
     #ifdef _WIN32

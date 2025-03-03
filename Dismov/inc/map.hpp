@@ -12,12 +12,11 @@ class Map{
 private:
     std::string map_name;
     duo map_dimensions;
-    int entities_count;
+    int entity_id;
     int entities_limit;
     
 public:
     std::unordered_map<int, Entity*> entities; // Map for entities <int : entity id | Entity* : entity>
-    std::unordered_map<duo, Entity*, hash_duo> positions;
     Map(int width, int height, int entities_limit);
     ~Map();
 
@@ -32,6 +31,7 @@ public:
     void delete_entity(int entity_id);
     void run();
     void kill_all();
+    std::vector<Entity*> get_entities_at(const duo& pos);
 };
 
 

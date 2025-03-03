@@ -1,9 +1,10 @@
 CYAN  = \033[1;36m
 PURPLE = \033[1;35m
+GREEN = \033[1;32m
 RESET = \033[0m
 
 # Nombre del ejecutable
-TARGET = bin/program.out
+TARGET = bin/program
 
 # Directorios
 SRC_DIR = Dismov/src
@@ -24,22 +25,30 @@ MAIN_OBJ := $(OBJ_DIR)/main.o
 
 # Compilador y flags
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -I$(INC_DIR)
+CXXFLAGS = -Wall -std=c++17 -fdiagnostics-color=always -I$(INC_DIR)
 
 # Regla para compilar cada archivo fuente en obj/
 $(OBJ_DIR)/Dismov/%.o: Dismov/%.cpp | obj_dirs
-	@echo "\n$(CYAN)Compilando $(PURPLE)$<$(CYAN) -> $(PURPLE)$@$(RESET)"
+	@echo "$(CYAN)Compilando $(PURPLE)$<$(CYAN) -> $(PURPLE)$@$(RESET)"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+all:
+	make clean
+	make src 
+	make main
+	clear
+	@echo "$(GREEN)Ejecutando programa...$(RESET)"
+	./$(TARGET)
 
 # Regla para compilar todas las dependencias (entities y src)
 src: $(OBJS)
 
 # Regla para compilar y linkear main.cpp después de src
 main: src | bin
-	@echo "\n$(CYAN)Compilando Main...$(RESET)"
+	@echo "$(CYAN)Compilando $(PURPLE)Main$(CYAN)...$(RESET)"
 	$(CXX) $(CXXFLAGS) -c main.cpp -o $(MAIN_OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(MAIN_OBJ) $(OBJS)
-	@echo "\n\033[1;32mMain compilado correctamente. $(RESET)"
+	@echo "$(GREEN)Main compilado correctamente.$(RESET)"
 
 # Crear carpetas necesarias para obj/ (recursivamente)
 obj_dirs:
@@ -52,6 +61,7 @@ bin:
 
 # Limpiar archivos compilados
 clean:
+	@echo "$(CYAN)Limpiando archivos compilados...$(RESET)"
 	rm -rf $(OBJ_DIR) $(TARGET)
 
 .PHONY: src main clean obj_dirs

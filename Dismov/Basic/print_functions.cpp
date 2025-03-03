@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::cout;
+using std::string;
+using namespace color;
+using namespace basic;
 
-
-void pressEnter(){
+void basic::pressEnter(){
     cout << cn << "Press "<< yl << "'ENTER' " << cn << "to continue..." << rst;
 }
 
@@ -26,15 +28,15 @@ void prtLL(string input, string color, int width, int number_lines, bool has_bor
     }
 }
 
-void printL(string input, string color, size_t width, bool has_border){
+void basic::printL(string input, string color, size_t width, bool has_border){
     if (input != ""){
         cout << color;
         string border = (has_border)? "|" : ""; 
-        vector<string> lines = adj_to_width(input, width - 2 * (border.length()), true, ' ');
+        std::vector<string> lines = adj_to_width(input, width - 2 * (border.length()), true, ' ');
         int i = 0;
         if (lines.size() > 1){
             do {
-                cout << cn << border << color << lines[i] << cn << border << endl;
+                cout << cn << border << color << lines[i] << cn << border << "\n";
                 i ++;
             } while (i < static_cast<int>(lines.size()) - 1);
         }
@@ -44,7 +46,7 @@ void printL(string input, string color, size_t width, bool has_border){
     }
 };
 
-void printC(string input, string color, size_t width, bool has_border){
+void basic::printC(string input, string color, size_t width, bool has_border){
     if (input != ""){ 
         int empty_spaces = width - input.length();
         empty_spaces = empty_spaces / 2;
@@ -54,6 +56,6 @@ void printC(string input, string color, size_t width, bool has_border){
 
         cout << cn << border;
         cout << color << left << input << right << rst; 
-        cout << cn << border << rst << endl;
+        cout << cn << border << rst << "\n";
     }
 };

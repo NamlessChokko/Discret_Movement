@@ -34,7 +34,6 @@ public:
     bool does_exist();
     
     virtual void turn();
-    
     void move();
     void move(int dir);
     void kill();

@@ -36,14 +36,14 @@ void duo::setRan(
     const vector<int>& exclude
 ){
     if (op){
-        this->y = randNum(max, min, exclude, false);
+        this->y = myMath::randInt(max, min, exclude);
     } else if (!op){
-        this->x = randNum(max, min, exclude, false);
+        this->x = myMath::randInt(max, min, exclude);
     }
 }
 
 int duo::gcd(){
-    return mcd(this->x, this->y);
+    return myMath::mcd(this->x, this->y);
 }
 
 bool duo::operator==(const duo& other) const {

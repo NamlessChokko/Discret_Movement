@@ -4,37 +4,56 @@
 #include <unistd.h>
 #include <chrono>
 #include <thread>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
 
-GameLoop::GameLoop(Map& map, int fps) : map(map), fps(fps){
+GameLoop::GameLoop(Map* map, int fps){
+    this->map = map;
+    this->fps = fps;
 };
 
 GameLoop::~GameLoop(){
 };
 
 void GameLoop::run(){
+    int pause_time = 1000 / fps;
     while (1){
         system("clear");
 
-        cout << "#" << rep_char(map.get_x() - 2, '=') << "#";
-        for (int x = 0; x < map.get_x(); x++){
+        cout << "#" << basic::rep_char(this->map->get_x(), '=') << "#";
+        cout << '\n';
+        for (int y = 0; y < this->map->get_y(); y++){
             cout << "#";
-            for (int y = 0; y < map.get_y(); y++){
+            for (int x = 0; x < this->map->get_x(); x++){
                 duo position{x, y};
+                std::vector<Entity*> entities = this->map->get_entities_at(position);
 
-                if (map.positions.find(position) != map.positions.end()){
-                    cout << map.positions[position]->get_body();
+                if (entities.empty()){
+                    cout << " ";
+                } else {
+                    Entity* entity_to_render = nullptr;
+                    for (Entity* entity : entities){
+                        if (!entity->get_isStatic()){
+                            entity_to_render = entity;
+                        }
+                    }
+
+                    if (entity_to_render == nullptr){
+                        entity_to_render = entities.back();
+                    }
+                    
+                    cout << entity_to_render->get_body(); 
                 }
-                
-
             }
             
             cout << "#";
             cout << '\n';
         }
-        cout << "#" << rep_char(map.get_x() - 2, '=') << "#";
-        map.run();
-        this_thread::sleep_for(chrono::milliseconds(150)); 
+        cout << "#" << basic::rep_char(this->map->get_x(), '=') << "#";
+        cout << '\n';
+        this->map->run();
+        this_thread::sleep_for(chrono::milliseconds(pause_time)); 
     }
 }

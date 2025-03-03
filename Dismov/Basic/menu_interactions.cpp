@@ -1,12 +1,12 @@
 #include "../inc/Basic.hpp"
 #include <iostream>
-using namespace std;
 
 const int ESC = 033;
 const int SQR_BRCKT = 91;
 
+using namespace basic;
 
-char get_arrow(){
+char basic::get_arrow(){
     if (getch() != ESC){ 
         return ' ';
     }
@@ -26,15 +26,15 @@ char get_arrow(){
     } else if (arrow == 'D'){
         return 'a';
     } else {
-        cin.ignore(); 
-        cin.ignore();
-        cin.ignore();
+        std::cin.ignore(); 
+        std::cin.ignore();
+        std::cin.ignore();
         return ' '; 
     }
 
 }
 
-int getKey() {
+int basic::getKey() {
     char code[5] = {'\0'};
 
     code[1] = getch();

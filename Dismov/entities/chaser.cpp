@@ -15,12 +15,12 @@ Chaser::~Chaser(){
     }
 }
 
-void Chaser::set_objective (Entity* _objective){
-    if (_objective == nullptr){
+void Chaser::set_objective (Entity* objective){
+    if (objective == nullptr){
         return;
     }
 
-    this->objective = _objective;
+    this->objective = objective;
 };
 
 void Chaser::chase(){
@@ -35,11 +35,11 @@ void Chaser::chase(){
         int y_distance = this->objective->get_position().y - get_position().y;
         
         if (abs(x_distance) > abs(y_distance)){
-            int run = find_ratio(x_distance, y_distance).x;
+            int run = myMath::find_ratio(x_distance, y_distance).x;
             int x_direction = (run > 0) ? RIGHT : LEFT;
             this->Entity::move(x_direction);
         } else {
-            int rise = find_ratio(x_distance, y_distance).y;
+            int rise = myMath::find_ratio(x_distance, y_distance).y;
             int y_direction = (rise > 0) ? UP : DOWN;
             this->Entity::move(y_direction);
         }    

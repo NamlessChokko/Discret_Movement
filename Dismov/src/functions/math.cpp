@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int mcd (int a, int b) {
+int myMath::mcd (int a, int b) {
     a = abs(a); b = abs(b);
     if (a == 0) return b;
     return mcd(b % a, a);
@@ -25,33 +25,29 @@ int mcd (int a, int b) {
     */
 }
 
-duo find_ratio(int a, int b) {
+duo myMath::find_ratio(int a, int b) {
     int _mcd = mcd(a, b);
     return {a / _mcd, b / _mcd};
 }
 
-int randNum(
+int myMath::randInt(
     int max, 
     int min, 
-    const vector<int>& exclude, 
-    bool real
+    const vector<int>& exclude
 ) {
     static std::random_device rd;  
     static std::mt19937 gen(rd());
 
-    if (!real) {
-        uniform_int_distribution<int> dist(min, max);
-        int number;
-        do {
-            number = dist(gen);
-        } while (
-            find(exclude.begin(), exclude.end(), number) != exclude.end()
-        );
 
-        return number;
-    }
-    uniform_real_distribution<float> dist(static_cast<float>(min), static_cast<float>(max));
-    return dist(gen);
+    uniform_int_distribution<int> dist(min, max);
+    int number;
+    do {
+        number = dist(gen);
+    } while (
+        find(exclude.begin(), exclude.end(), number) != exclude.end()
+    );
+
+    return number;
 }
 
 bool even (int input){

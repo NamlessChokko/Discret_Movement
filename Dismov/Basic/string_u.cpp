@@ -2,9 +2,11 @@
 #include "../inc/constants.hpp"
 
 #include <unordered_map>
-using namespace std;
+using namespace color;
+using namespace basic;
+using std::string;
 
-unordered_map<string, string> colors = {
+std::unordered_map<string, string> colors = {
     {"*rs", rst},
     {"^bk", bk},
     {"^rd", rd},
@@ -24,7 +26,7 @@ unordered_map<string, string> colors = {
     {"#wt", bg_wt}
 };
 
-string format(string input) {
+string basic::format(string input) {
     string formatted = "";
     int key_length = 3;
 
@@ -45,13 +47,13 @@ string format(string input) {
     return formatted;
 }
 
-vector<string> adj_to_width(
+std::vector<string> basic::adj_to_width(
     string input, 
     size_t width, 
     bool fill, 
     char empty_space
 ) {
-    vector<string> lines;
+    std::vector<string> lines;
     string line;
     size_t input_length = input.length();
     
@@ -90,11 +92,11 @@ vector<string> adj_to_width(
     return lines;
 }
 
-string rep_char(int times, char character) {
+string basic::rep_char(int times, char character) {
     return string (times, character);
 }
 
-string cutLine(string input, int width){
+string basic::cutLine(string input, int width){
     string line;
     
     if (static_cast<int>(input.size()) < width){

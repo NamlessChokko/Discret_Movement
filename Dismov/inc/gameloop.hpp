@@ -6,11 +6,11 @@ class Map;
 
 class GameLoop{
 private:
-    Map &map;
+    Map *map;
     int fps;
 
 public:
-    GameLoop(Map &map, int fps);
+    GameLoop(Map *map, int fps);
     ~GameLoop();
     void set_speed(int fps);
     int get_speed();

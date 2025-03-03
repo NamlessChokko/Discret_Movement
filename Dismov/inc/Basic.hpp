@@ -5,35 +5,36 @@
 #include <string>
 #include <vector>
 
+namespace basic {
+    char getch();
 
-char getch();
+    int getTerminalWidth();
 
-int getTerminalWidth();
+    void pressEnter();
 
-void pressEnter();
+    void prtLL(std::string input, std::string color, int width, int number_lines, bool has_border);
 
-void prtLL(std::string input, std::string color, int width, int number_lines, bool has_border);
+    void printL(std::string input, std::string color, size_t width, bool has_border);
 
-void printL(std::string input, std::string color, size_t width, bool has_border);
+    void printC(std::string input, std::string color, size_t width, bool has_border);
 
-void printC(std::string input, std::string color, size_t width, bool has_border);
+    char get_arrow();
 
-char get_arrow();
+    int getKey();
 
-int getKey();
+    std::string format(std::string input);
 
-std::string format(std::string input);
+    std::vector<std::string> adj_to_width (
+        std::string input, 
+        size_t width,
+        bool fill,
+        char empty_space
+    );
 
-std::vector<std::string> adj_to_width (
-    std::string input, 
-    size_t width,
-    bool fill,
-    char empty_space
-);
+    std::string rep_char (int times, char character);
 
-std::string rep_char (int times, char character);
-
-std::string cutLine (std::string input, int width);
+    std::string cutLine (std::string input, int width);
+}
 
 
 #endif // BASIC
