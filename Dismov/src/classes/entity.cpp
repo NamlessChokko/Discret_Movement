@@ -2,6 +2,8 @@
 #include "../../inc/map.hpp"
 #include "../../inc/structs.hpp"
 #include "../../inc/constants.hpp"
+#include "../../inc/Basic.hpp"
+#include "../../inc/constants.hpp"
 
 using namespace std;
 
@@ -12,10 +14,14 @@ Entity::Entity(Map &map) : map(map){
     this->position = {0,0};
     this->isStatic = true;
     this->exists = false;
+    this->immortal = false;
+    this->color = color::rst;
+    this->deaths = 0;
+    this->kills = 0;
 };
 
 Entity::~Entity(){
-    kill();
+    //kill();
 };
 
 void Entity::put_in(Map &map){
@@ -39,6 +45,12 @@ void Entity::set_isStatic(bool isStatic){
 void Entity::set_id(int id){
     this->id = id;
 }
+void Entity::set_immortal(bool immortal){
+    this->immortal = immortal;
+}
+void Entity::set_color(string color){
+    this->color = color;
+}
 
 string Entity::get_name(){
     return name;
@@ -58,6 +70,20 @@ bool Entity::does_exist(){
 int Entity::get_id(){
     return id;
 };
+bool Entity::get_immortal(){
+    return immortal;
+};
+string Entity::get_color(){
+    return color;
+};
+int Entity::get_deaths(){
+    return deaths;
+};
+int Entity::get_kills(){
+    return kills;
+};
+
+
 
 void Entity::move(int dir){
     if (this->get_isStatic()){
@@ -96,14 +122,16 @@ void Entity::kill(){
         return;
     }
 
-    this->exists = false;
-    this->body = '\0';
-    this->position = {0,0};
-    this->isStatic = true;
-    this->name = "";
-
-    map.delete_entity(this->id); 
-    this->exists = false;
+    this->map.add_corpse(to_corpse(this));
+    this->deaths++;
+    
+    if (immortal){
+        position = {myMath::randInt(map.get_x() - 1), myMath::randInt(map.get_y() - 1)};
+        return;
+    } else {
+        map.delete_entity(this->id); 
+        this->exists = false;
+    }
 }
 
 void Entity::turn(){

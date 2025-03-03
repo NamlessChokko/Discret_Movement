@@ -4,52 +4,54 @@
 #include <random>
 #include <algorithm>
 
-using namespace std;
 
 int myMath::mcd (int a, int b) {
     a = abs(a); b = abs(b);
     if (a == 0) return b;
     return mcd(b % a, a);
 
-    /*
-    The Euclidean algorithm:
-
-    The Euclidean algorithm is a way to find the greatest 
-    common divisor of two positive integers. GCD of 
-    two numbers is the largest number that divides 
-    both of them. A simple way to find GCD is to 
-    factorize both numbers and multiply common prime factors.
-
-    Source: 
-    https://www.geeksforgeeks.org/euclidean-algorithms-basic-and-extended/
-    */
 }
 
-duo myMath::find_ratio(int a, int b) {
-    int _mcd = mcd(a, b);
-    return {a / _mcd, b / _mcd};
+int myMath::mcm(int a, int b){
+    return (a * b) / myMath::mcd(a, b);
 }
 
-int myMath::randInt(
-    int max, 
-    int min, 
-    const vector<int>& exclude
-) {
-    static std::random_device rd;  
-    static std::mt19937 gen(rd());
-
-
-    uniform_int_distribution<int> dist(min, max);
-    int number;
-    do {
-        number = dist(gen);
-    } while (
-        find(exclude.begin(), exclude.end(), number) != exclude.end()
-    );
-
-    return number;
+duo myMath::find_ratio(int x, int y){
+    int mcd_r = mcd(abs(x), abs(y));
+    if(x == 0){
+        return {0, (y/mcd_r)};
+    } else if(y == 0){
+        return {(x/mcd_r), 0};
+    } else {
+        return {(x/mcd_r), (y/mcd_r)};
+    }
 }
 
-bool even (int input){
-    return abs((input % 2) - 1);
+int myMath::randInt(int max, int min, const std::vector<int>& exclude){
+    
+    std::random_device rd;
+    std::mt19937 generator(rd());
+
+    std::uniform_int_distribution<> distribution(min, max);
+    int ran = distribution(generator);
+    bool ex = false;
+
+    for(int i = 0; i < static_cast<int>(exclude.size()); i++){
+        if(ran == exclude[i]){
+            ex = true;
+        }
+    }
+
+    if(ex){
+        return randInt(max, min, exclude);
+    } else {
+        return ran;
+    }
+}
+
+int myMath::find_distance(duo pointA, duo pointB){
+    int x_distance = abs(pointA.x - pointB.x);
+    int y_distance = abs(pointA.y - pointB.y);
+
+    return sqrt(pow(x_distance, 2) + pow(y_distance, 2));
 }

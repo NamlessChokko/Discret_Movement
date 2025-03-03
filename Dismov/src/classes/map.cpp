@@ -4,9 +4,11 @@
 #include <string>
 #include <unordered_map>
 #include <iostream>
+#include <vector>
 
 using std::string;
 using std::make_pair;
+using std::vector;
 
 Map::Map(int width, int height, int entities_limit){
     this->map_dimensions = {width, height};
@@ -16,6 +18,9 @@ Map::Map(int width, int height, int entities_limit){
 Map::~Map(){
     for(auto &entity : entities){
         delete entity.second;
+    }
+    for (auto &corpse : corpses){
+        delete corpse;
     }
 }
 
@@ -38,28 +43,44 @@ int Map::get_y(){
 }
 
 int Map::get_entities_count(){
-    return entities.size();
+    return this->entities.size();
+}
+int Map::get_corpses_count(){
+    return this->corpses.size();
 }
 
 void Map::add_entity(Entity* entity){
-    if (entity == nullptr || this->get_entities_count() + 1 >= entities_limit){
+    if (entity == nullptr || static_cast<int>(entities.size()) + 1 >= entities_limit){
         return;
     }
 
-    this->entity_id++;
-    
     std::cout << "Entity name: ";
     std::cout << entity->get_name() << '\n';
-    this->entities.insert(make_pair(entity_id, entity));
+    this->entity_id++;
+    this->entities.insert(make_pair(this->entity_id, entity));
+    entity->set_id(this->entity_id);
 }
 void Map::delete_entity(int entity_id){
     if (entities.find(entity_id) == entities.end()){
         return;
     }
-
     delete entities[entity_id];
     entities.erase(entity_id);
 }
+
+void Map::add_corpse(corpse* corpse){
+    this->corpses.push_back(corpse);
+}
+void Map::delete_corpse(int corpse_id){
+    if(corpses.empty()){
+        return;
+    }
+    if (static_cast<int>(corpses.size()) < corpse_id){
+        return;
+    }
+    corpses.erase(corpses.begin() + corpse_id);
+}
+
 void Map::run(){
     for(auto &entity : entities){
         entity.second->turn();
@@ -71,13 +92,31 @@ void Map::kill_all() {
     }
 }
 
-std::vector<Entity*> Map::get_entities_at(const duo& pos) { // ADDED: Implementation of get_entity_at.
-    std::vector<Entity*> entities; 
+std::vector<Entity*> Map::get_entities_at(const duo& pos) { 
+    std::vector<Entity*> entities = {}; 
+    if (this->entities.size() == 0){
+        return entities;
+    }; 
+
     for (const auto& pair : this->entities) {
         if (pair.second->get_position() == pos && pair.second->does_exist()) {
-            entities.push_back(pair.second);
+            entities.push_back(pair.second); 
         }
     }
-    return entities; // No entity found at that position.
+    
+    return entities; 
 }
+std::vector<corpse*> Map::get_corpses_at(const duo& pos){
+    std::vector<corpse*> found_corpses = {};
+    if (this->corpses.empty()){
+        return found_corpses;
+    }
 
+    for (const auto& corpse : this->corpses) {
+        if (corpse->position == pos) {
+            found_corpses.push_back(corpse);
+        }
+    }
+    
+    return found_corpses;
+}

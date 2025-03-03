@@ -2,20 +2,19 @@
 #ifndef CHASER 
 #define CHASER
 
-#include "../Dismov.hpp"
+#include "../../Dismov.hpp"
 
 
 class Chaser : public Entity{
 private:
-
-protected:
     Entity *objective;
 
 public:
     Chaser(Map &entity_map);
     ~Chaser() override;
     void set_objective(Entity *objective);
-    void chase();
+    virtual void chase();
+    virtual void kill_objective();
     void turn() override;
 };
 

@@ -7,14 +7,12 @@ class Map;
 class GameLoop{
 private:
     Map *map;
-    int fps;
+    int emulation_speed;
 
 public:
-    GameLoop(Map *map, int fps);
+    GameLoop(Map *map);
     ~GameLoop();
-    void set_speed(int fps);
-    int get_speed();
-    void run();
+    void run(int emulation_speed);
 };
 
 

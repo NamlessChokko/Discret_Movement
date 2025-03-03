@@ -15,12 +15,15 @@ OBJ_DIR = obj
 
 # Buscar archivos fuente en subdirectorios
 SRC_FILES := $(shell find $(SRC_DIR) -type f -name '*.cpp')
-ENTITY_FILES := $(wildcard $(ENTITIES_DIR)/*.cpp)
+ENTITY_FILES := $(shell find $(ENTITIES_DIR) -type f -name '*.cpp') 
 BASIC_FILES := $(wildcard $(BASIC_DIR)/*.cpp)
 SRCS := $(SRC_FILES) $(ENTITY_FILES) $(BASIC_FILES)
 
 # Generar la lista de archivos objeto (reemplazando rutas correctamente)
-OBJS := $(patsubst Dismov/%.cpp, $(OBJ_DIR)/Dismov/%.o, $(SRCS))
+SRC_OBJS := $(patsubst Dismov/src/%.cpp, $(OBJ_DIR)/Dismov/src/%.o, $(SRC_FILES))
+ENTITY_OBJS := $(patsubst Dismov/entities/%.cpp, $(OBJ_DIR)/Dismov/entities/%.o, $(ENTITY_FILES))
+BASIC_OBJS := $(patsubst $(BASIC_DIR)/%.cpp, $(OBJ_DIR)/Dismov/Basic/%.o, $(BASIC_FILES))
+OBJS := $(SRC_OBJS) $(ENTITY_OBJS) $(BASIC_OBJS)
 MAIN_OBJ := $(OBJ_DIR)/main.o
 
 # Compilador y flags
@@ -33,7 +36,6 @@ $(OBJ_DIR)/Dismov/%.o: Dismov/%.cpp | obj_dirs
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 all:
-	make clean
 	make src 
 	make main
 	clear
@@ -53,7 +55,7 @@ main: src | bin
 # Crear carpetas necesarias para obj/ (recursivamente)
 obj_dirs:
 	mkdir -p $(OBJ_DIR)/Dismov/src $(OBJ_DIR)/Dismov/entities $(OBJ_DIR)/Dismov/Basic
-	mkdir -p $(patsubst Dismov/%, $(OBJ_DIR)/Dismov/%, $(shell find $(SRC_DIR) -type d)) 
+	mkdir -p $(patsubst Dismov/%, $(OBJ_DIR)/Dismov/%, $(shell find $(SRC_DIR) $(ENTITIES_DIR) $(BASIC_DIR) -type d)) 
 
 # Crear carpeta para bin/
 bin:

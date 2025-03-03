@@ -2,7 +2,7 @@
 #ifndef DUMB
 #define DUMB
 
-#include "../Dismov.hpp"
+#include "../../Dismov.hpp"
 
 class Dummy : public Entity{
 public:

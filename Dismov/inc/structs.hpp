@@ -4,6 +4,9 @@
 
 #include "math.hpp"
 #include <vector>
+#include <string>
+
+class Entity;
 
 // Duo: 
 // -- Struct use to pair to integer values:
@@ -25,14 +28,27 @@ struct duo{
     );
     int gcd();
     bool operator ==(const duo& other) const;
-
+    
 }; 
 
+std::string to_string(duo input);
 struct hash_duo {
     size_t operator()(const duo& d) const {
         return std::hash<int>()(d.x) ^ (std::hash<int>()(d.y) << 1);
     }
 };
+
+
+struct corpse{
+    duo position;
+    char body;
+
+    public:
+    corpse(duo position, char body);
+};
+
+corpse* to_corpse(Entity* entity);
+
 
 #endif // STRUCTS
 
